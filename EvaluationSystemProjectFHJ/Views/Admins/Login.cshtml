@@ -1,0 +1,153 @@
+﻿@model EvaluationSystemProjectFHJ.Models.Admin
+
+@{
+    Layout = null;
+    ViewBag.Title = "Login";
+}
+
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<style>
+    @@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+.login-page {
+  width: 360px;
+  padding: 8% 0 0;
+  margin: auto;
+}
+.form {
+  position: relative;
+  z-index: 1;
+  background: #FFFFFF;
+  max-width: 360px;
+  margin: 0 auto 100px;
+  padding: 45px;
+  text-align: center;
+  box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+}
+.form input {
+  font-family: "Roboto", sans-serif;
+  outline: 0;
+  background: #f2f2f2;
+  width: 100%;
+  border: 0;
+  margin: 0 0 15px;
+  padding: 15px;
+  box-sizing: border-box;
+  font-size: 14px;
+}
+.form button {
+  font-family: "Roboto", sans-serif;
+  text-transform: uppercase;
+  outline: 0;
+  background: #4CAF50;
+  width: 100%;
+  border: 0;
+  padding: 15px;
+  color: #FFFFFF;
+  font-size: 14px;
+  -webkit-transition: all 0.3 ease;
+  transition: all 0.3 ease;
+  cursor: pointer;
+}
+.form button:hover,.form button:active,.form button:focus {
+  background: #43A047;
+}
+.form .message {
+  margin: 15px 0 0;
+  color: #b3b3b3;
+  font-size: 12px;
+}
+.form .message a {
+  color: #4CAF50;
+  text-decoration: none;
+}
+.form .register-form {
+  display: none;
+}
+
+.swal2-popup {
+        font-size: 1.6rem !important;
+    }
+
+
+.full-width {
+        width: 100%;
+    }
+
+    .mywrapper {
+        width: 93%;
+        margin: 0 auto;
+    }
+
+</style>
+<div class="full-width" style="height:120px; background-color:#1d6a3e;">
+    <div class="container" style="height:90px; background-color:#212121;">
+        <center>
+            <h1 style="color:#faface;">Teacher Evaluation System</h1>
+        </center>
+    </div>
+</div>
+<div class="navbar navbar-inverse" style="margin-top:-10px;">
+    
+</div>
+
+<div class="login-page">
+    <div class="form">
+        <form class="login-form">
+            <input id="username" type="text" placeholder="username" />
+            <input id="password" type="password" placeholder="password" />
+            <button type="button" id="submit">login</button>
+        </form>
+    </div>
+</div>
+
+
+<script>
+
+    $(document).ready(function () {
+
+        $('#submit').on('click', function () {
+            var username = $('#username').val();
+            var password = $('#password').val();
+            var studentname;
+            var studentid;
+            var studentcourse;
+            $.ajax({
+                type: "POST",
+                url: "/Admins/LoginAdmin",
+                data: { username: username , password: password },
+                success: function (response) {
+                    if (response.length == 0) {
+                        Swal.fire({
+                            title: 'Account not found',
+                            text: 'Sorry you\'re not yet registered or your account is not yet activated',
+                            type: 'error',
+                            confirmButtonText: 'Okay'
+                        })
+                    } else {
+                        $.ajax({
+                            type: "POST",
+                            url: "/Admins/LoginAdminSession",
+                            data: { username: username, password: password },
+                            success: function (response) {
+                                if (response == "error") {
+
+                                } else {
+                                    window.location.href = '@Url.Action("Index", "Students")';
+                                }
+
+                            }
+                        });
+                    }
+
+                }
+                });
+
+        });
+    });
+</script>

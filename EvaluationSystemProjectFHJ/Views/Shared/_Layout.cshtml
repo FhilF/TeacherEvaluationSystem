@@ -1,0 +1,179 @@
+﻿@{
+
+    if (@Session["sessionAdminUsername"] == null)
+    {
+        Response.Redirect("~/Admins/Login");
+
+    }
+}
+
+<!DOCTYPE html>
+<style>
+    .swal2-popup {
+        font-size: 1.6rem !important;
+    }
+    .full-width {
+        width: 100%;
+    }
+
+    .mywrapper {
+        width: 93%;
+        margin: 0 auto;
+    }
+
+
+</style>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewBag.Title - My ASP.NET Application</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+
+</head>
+<body>
+    <input type="hidden" id="sessionpassword" value="@Session["sessionAdminPassword"]"/>
+    <div class="full-width" style="height:120px; margin-top:-50px; background-color:#1d6a3e;">
+        <div class="container" style="height:90px; background-color:#212121;">
+            <center>
+                <h1 style="color:#faface;">Teacher Evaluation System</h1>
+            </center>
+        </div>
+    </div>
+    <div class="navbar navbar-inverse" style="margin-top:-10px;">
+        <div class="container">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+            </div>
+            <div class="navbar-collapse collapse">
+                @if (@Session["sessionAdminUsername"] != null)
+                {
+                    <ul class="nav navbar-nav">
+                        <li>@Html.ActionLink("Students", "Index", "Students")</li>
+                        @if (@Session["sessionAdminPosition"].Equals("Admin"))
+                        {
+                            <li>@Html.ActionLink("Professors", "Index", "Professors")</li>
+                            <li>@Html.ActionLink("Subjects", "Index", "Subjects")</li>
+                            <li>@Html.ActionLink("Departments", "Index", "Departments")</li>
+
+                        
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                                    Admin Controls
+                                    <span class="caret"></span>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li>@Html.ActionLink("Admins", "Index", "Admins")</li>
+                                    <li id="resetrecords"><a href="#">Reset Records</a></li>
+
+                                    @using (Html.BeginForm("DeleteRecord", "Students", FormMethod.Post, new { id = "deleteForm" }))
+                                    {
+                                        @Html.AntiForgeryToken();
+                                    }
+                                </ul>
+                            </li>
+
+                        }
+                    </ul>
+
+                    using (Html.BeginForm("LogoutSession", "Admins", FormMethod.Post, new { id = "logoutForm", @class = "navbar-right" }))
+                    {
+                        @Html.AntiForgeryToken()
+
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a href="javascript:document.getElementById('logoutForm').submit()">Sign out</a></li>
+                        </ul>
+                    }
+                }
+
+
+               
+            </div>
+        </div>
+    </div>
+    <div class="container body-content">
+        @RenderBody()
+        <hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+</body>
+</html>
+<script>
+    $(document).ready(function () {
+        $(".dropdown-toggle").dropdown();
+
+        $("#resetrecords").on("click", function () {
+
+            Swal.fire({
+                title: 'Deleting all student records!',
+                text: 'Are you sure you want to delete all student records?',
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, I am sure',
+                cancelButtonText: 'No, I am not',
+                reverseButtons: true
+            }).then(result => {
+                if (result.value) {
+                    
+                    var sessionPassword = $('#sessionpassword').val();
+                    (async function getPassword () {
+                        const {value: password} = await Swal.fire({
+                            title: 'Enter your password',
+                            input: 'password',
+                            inputPlaceholder: 'Enter your password',
+                            showCancelButton: true,
+                            confirmButtonText: 'Delete',
+                            cancelButtonText: 'Cancel',
+                            reverseButtons: true,
+                            inputAttributes: {
+                                maxlength: 20,
+                                autocapitalize: 'off',
+                                autocorrect: 'off'
+                            }
+                        })
+
+                        if (password != "" ) {
+                            if(sessionPassword == password){
+                                document.getElementById('deleteForm').submit()
+                            }else{
+                                Swal.fire({
+                                    title: 'Wrong password',
+                                    text: 'Sorry, cant process your request',
+                                    type: 'error'
+                                });
+                            }
+                        }else{
+                            Swal.fire({
+                                title: 'No password inputted',
+                                text: 'Please enter a password',
+                                type: 'error'
+                            });
+                        }
+                    })()
+
+                } else {
+                    swal.dismiss
+                }
+            });
+
+            
+        });
+    });
+</script>

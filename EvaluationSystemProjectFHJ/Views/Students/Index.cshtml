@@ -1,0 +1,60 @@
+﻿@model IEnumerable<EvaluationSystemProjectFHJ.Models.Student>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Students</h2>
+<p><b>@Html.ActionLink("Add new student", "Create")</b></p>
+<table class="table table-bordered" id="tabledata">
+    <thead style="background-color:#3a3a3a;color:#f9f9c9;">
+        <tr>
+            <th>
+                ID No.
+            </th>
+            <th>
+                Name
+            </th>
+            <th>
+                Course
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.StudentID)
+                </td>
+                <td>
+
+                    @Html.DisplayFor(modelItem => item.Lastname), @Html.DisplayFor(modelItem => item.Firstname) @Html.DisplayFor(modelItem => item.Middlename)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Courses.CourseCode)
+                </td>
+                <td>
+                    @Html.ActionLink("View", "ViewStudent", new { id = item.StudentID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.StudentID })
+                </td>
+            </tr>
+
+        }
+    </tbody>
+</table>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#tabledata').DataTable();
+    });
+</script>

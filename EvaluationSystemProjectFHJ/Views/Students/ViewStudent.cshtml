@@ -1,0 +1,76 @@
+﻿@model IEnumerable<EvaluationSystemProjectFHJ.Models.Sheet>
+@{
+    var resultId = Model.GroupBy(x => x.StudentID);
+    var resultName = Model.GroupBy(x => x.Students.Lastname + ", " + x.Students.Firstname);
+    var resultCourse = Model.GroupBy(x => x.Students.Courses.CourseCode);
+}
+<div class="row" style="margin-top:-20px;">
+
+    <h2>Student Evaluation</h2>
+    <div class="col-md-8">
+        <table class="table table-bordered" id="tabledata">
+            <thead style="background-color:#3a3a3a;color:#f9f9c9;">
+                <tr>
+                    <th>
+                        Professor
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Professors.Lastname), @Html.DisplayFor(modelItem => item.Professors.Firstname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateSubmitted)
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+        </table>
+
+    </div>
+    <div class="col-md-4">
+        <h4><b>Student Information</b></h4>
+        <hr />
+        <h5>
+            
+            <b>Student Id:&nbsp;</b>@ViewBag.StudentId
+        </h5>
+        <h5>
+            <b>Student Name:&nbsp;</b>@ViewBag.StudentName
+        </h5>
+        <h5>
+            <b>Course:&nbsp;</b>@ViewBag.StudentCourse
+        </h5>
+
+    </div>
+
+</div>
+<div class="form-actions no-color">
+    @Html.ActionLink("Back to List", "Index")
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#tabledata').DataTable();
+    });
+</script>

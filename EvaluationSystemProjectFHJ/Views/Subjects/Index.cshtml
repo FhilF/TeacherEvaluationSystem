@@ -1,0 +1,61 @@
+﻿@model IEnumerable<EvaluationSystemProjectFHJ.Models.Subject>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Subjects</h2>
+<p><b>@Html.ActionLink("Add new subject", "Create") || @Html.ActionLink("Enroll a Subject", "Create", "ProfessorSubjects") || @Html.ActionLink("Enrolled Subjects", "Index", "ProfessorSubjects")</b></p>
+
+<div class="row">
+    <div class="col-md-8">
+        <table class="table table-bordered" id="tabledata">
+            <thead style="background-color:#3a3a3a;color:#f9f9c9;">
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubjectCode)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SubjectName)
+                    </th>
+                    <th></th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubjectCode)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SubjectName)
+                        </td>
+                        <td>
+                            @Html.ActionLink("Delete", "Delete", new { id = item.SubjectID })
+                        </td>
+                    </tr>
+                }
+            </tbody>
+
+
+        </table>
+    </div>
+</div>
+
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#tabledata').DataTable();
+    });
+</script>

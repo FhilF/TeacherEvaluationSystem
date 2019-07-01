@@ -1,0 +1,59 @@
+﻿@model IEnumerable<EvaluationSystemProjectFHJ.Models.Professor>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Professors</h2>
+
+<p><b>@Html.ActionLink("Add new Professor", "Create") || @Html.ActionLink("Enroll a Subject", "Create" , "ProfessorSubjects") || @Html.ActionLink("Enrolled Subjects", "Index", "ProfessorSubjects")</b></p>
+<table class="table table-bordered" id="tabledata">
+    <thead style="background-color:#3a3a3a;color:#f9f9c9;">
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.departments.DepartmentName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lastname)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Firstname)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.departments.DepartmentName)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Lastname)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Firstname)
+                </td>
+                <td>
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProfessorID }) |
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProfessorID }) |
+                    @Html.ActionLink("View Result", "ViewResult", new { id = item.ProfessorID }) |
+                    @Html.ActionLink("Subjects", "EnrolledSubjects", new { id = item.ProfessorID })
+                </td>
+            </tr>
+        }
+   </tbody>
+</table>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+<script>
+    $(document).ready(function () {
+
+        $('#tabledata').DataTable();
+    });
+</script>

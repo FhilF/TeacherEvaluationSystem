@@ -1,0 +1,34 @@
+﻿@model EvaluationSystemProjectFHJ.Models.ProfessorSubject
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>ProfessorSubject</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Professors.Lastname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Professors.Lastname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subjects.SubjectCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subjects.SubjectCode)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ProfessorSubjectID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

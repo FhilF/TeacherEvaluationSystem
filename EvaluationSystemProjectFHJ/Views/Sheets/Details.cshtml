@@ -1,0 +1,89 @@
+﻿@model EvaluationSystemProjectFHJ.Models.Sheet
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>Sheet</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Professors.Lastname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Professors.Lastname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Students.Lastname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Students.Lastname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Subject)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionOne)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionOne)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionTwo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionTwo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionThree)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionThree)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionFour)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionFour)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.QuestionFive)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.QuestionFive)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DateSubmitted)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DateSubmitted)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Back to List", "../Students/Home")
+</p>

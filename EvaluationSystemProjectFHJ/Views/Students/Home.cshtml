@@ -1,0 +1,194 @@
+﻿@model IEnumerable<EvaluationSystemProjectFHJ.Models.Sheet>
+@{
+    Layout = null;
+}
+<style>
+.full-width{
+	
+	width:100%;
+	
+}
+
+.mywrapper{
+	width:93%;
+	margin:0 auto;
+}
+
+
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://cdn.datatables.net/1.10.19/css/jquery.dataTables.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+@{
+    ViewBag.Title = "Home";
+}
+@{
+
+    if (@Session["sessionStudentId"] == null)
+    {
+        Response.Redirect("~/Students/Login");
+
+    }
+}
+
+@{
+    var resultName = Model.GroupBy(x => x.Students.Lastname + ", " + x.Students.Firstname);
+    var resultCourse = Model.GroupBy(x => x.Students.Courses.CourseCode);
+}
+<div class="full-width" style="height:200px; background-color:#1d6a3e;">
+    <div class="mywrapper">
+        <div class="jumbotron" style="background-color:#30302e; height:175px;">
+            <center>
+                <h1 style="color:#faface;">Teacher Evaluation System</h1>
+            </center>
+        </div>
+    </div>
+</div>
+
+<div class="container">
+    <br />
+    @using (Html.BeginForm("LogoutSession", "Students"))
+    {
+        <input type="submit" class="btn btn-danger btn-lg pull-right" value="Sign out" />
+    }
+    <h2><b>Home</b></h2>
+    
+    <div class="row" id="print">
+        <div class="col-md-8">
+            <div id="txtEval">
+                <h4><b>Evaluation Information</b></h4>
+                <hr />
+            </div>
+            <table class="table" id="tabledisplay">
+                <thead>
+                    <tr>
+                        <th>
+                            Professor
+                        </th>
+                        <th>
+                            Subject
+                        </th>
+                        <th>
+                            Date Submitted
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model){
+                        <tr>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Professors.Lastname), @Html.DisplayFor(modelItem => item.Professors.Firstname)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.Subject)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(modelItem => item.DateSubmitted)
+                            </td>
+                            <td>
+                                @Html.ActionLink("View", "../Sheets/Delete", new { id = item.SheetID })
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+
+            <table class="table" id="tableprint" style="visibility:collapse;">
+                <tr>
+                    <th>
+                        Professor
+                    </th>
+                    <th>
+                        Subject
+                    </th>
+                    <th>
+                        Date Submitted
+                    </th>
+                </tr>
+
+                @foreach (var item in Model)
+            {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Professors.Lastname), @Html.DisplayFor(modelItem => item.Professors.Firstname)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Subject)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DateSubmitted)
+                        </td>
+                    </tr>
+                }
+
+            </table>
+        </div>
+        <div class="col-md-4">
+            <h4><b>Student Information</b></h4>
+            <hr />
+            <h5>
+                <b>Student Id:&nbsp;</b>@{if (@Session["sessionStudentId"] != null)
+                    { @Session["sessionStudentId"]}}
+            </h5>
+            <h5>
+                <b>Student Name:&nbsp;</b>@{if (@Session["sessionStudentId"] != null)
+                    { @Session["sessionStudentName"]}}
+            </h5>
+            <h5>
+                <b>Course:&nbsp;</b>@{if (@Session["sessionStudentId"] != null)
+                    { @Session["sessionStudentCourse"]}}
+            </h5>
+            <button class="btn btn-success btn-lg" id="create" onclick="location.href='@Url.Action("Create", "Sheets")';return false;">Evaluate new professor</button>
+            <button class="btn btn-default btn-lg" id="submit" onclick="printContent('print');">Print</button>
+        </div>
+    </div>
+    <hr />
+    <footer>
+        <p>&copy; @DateTime.Now.Year - Switso Company</p>
+    </footer>
+    
+</div>
+
+<script>
+    function printContent(el){
+
+        var table = $('#tabledisplay').DataTable();
+        table.destroy();
+        var restorepage = $('body').html();
+        document.getElementById("txtEval").style.visibility = "collapse";
+        document.getElementById("tabledisplay").style.visibility = "collapse";
+        document.getElementById("create").style.visibility = "collapse";
+        document.getElementById("submit").style.visibility = "collapse";
+        document.getElementById("tableprint").style.visibility = "visible";
+        var printcontent = $('#' + el).clone();
+        $('body').empty().html(printcontent);
+        window.print();
+        $('body').html(restorepage);
+
+
+        /* var prtContent = document.getElementById(el);
+        document.getElementById("tabledisplay").style.visibility = "collapse";
+        document.getElementById("tableprint").style.visibility = "visible";
+        var WinPrint = window.open('', '', 'left=0,top=0,width=600,height=400,toolbar=1,scrollbars=1,status=0');
+        WinPrint.document.write('<html><head><title></title></head>');
+        WinPrint.document.write('<body style="font-family:verdana; font-size:14px;width:800px;height:400px:" >');
+        WinPrint.document.write(prtContent.innerHTML);
+        WinPrint.document.write('</body></html>');
+        WinPrint.document.close();
+        WinPrint.focus();
+        WinPrint.print();
+        WinPrint.close();
+        prtContent.innerHTML = ""; 
+        */
+    }
+$(document).ready(function () {
+
+    $('#tabledisplay').DataTable();
+});
+
+</script>

@@ -1,0 +1,171 @@
+﻿@model EvaluationSystemProjectFHJ.Models.Student
+
+@{
+    Layout = null;
+}
+@{
+    ViewBag.Title = "Login";
+}
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/js/bootstrap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
+
+<style>
+    .swal2-popup {
+        font-size: 1.6rem !important;
+    }
+
+.full-width{
+	
+	width:100%;
+	
+}
+
+.mywrapper{
+	width:93%;
+	margin:0 auto;
+}
+
+.mywrapper1{
+	margin:0 auto;
+	margin-top:80px;
+	width:35%;
+	height:150px;
+	background-color:#1d6a3e;
+border-radius: 13px 13px 13px 13px;
+-moz-border-radius: 13px 13px 13px 13px;
+-webkit-border-radius: 13px 13px 13px 13px;
+border: 1px solid #000000;
+}
+
+</style>
+<div class="full-width" style="height:200px; background-color:#1d6a3e;">
+    <div class="mywrapper">
+        <div class="jumbotron" style="background-color:#30302e; height:175px;">
+            <center>
+                <h1 style="color:#faface;">Teacher Evaluation System</h1>
+            </center>
+        </div>
+    </div>
+</div>
+<p>@ViewBag.result<p />
+
+<div class="container">
+    <div class="mywrapper1">
+        <center>
+            <h3 style="text-align:center;margin-top:20px;color:#faface; font-weight:bolder">Enter your ID Number</h3>
+            <div class="col-sm-11" style="margin-left:10px;">
+                <input type="text" name="id" id="id" class="form-control" />
+            </div>
+
+            <input type="submit" value="Sign in" class="btn btn-success" id="submit" style="margin-top:10px;" />
+        </center>
+    </div>
+
+    <footer class="navbar-fixed-bottom">
+        <div class="container" style="padding-bottom: 30px;">
+            <hr />
+            <p>&copy; @DateTime.Now.Year - Switso Company</p>
+        </div>
+    </footer>
+    
+
+</div>
+
+
+<script>
+    function isEmptyOrSpaces(str) {
+        return str === null || str.match(/^ *$/) !== null;
+    }
+    $(document).ready(function () {
+
+        $('#submit').on('click', function () {
+            var id = $('#id').val();
+            var studentname;
+            var studentid;
+            var studentcourse;
+            if (isEmptyOrSpaces(id)) {
+                Swal.fire({
+                    title: 'No id inputted!',
+                    text: 'Please input your id number to proceed',
+                    type: 'error',
+                    confirmButtonText: 'Okay'
+                },
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    swal.close();
+                                }
+                            });
+            } else {
+
+                $.ajax({
+                    type: "POST",
+                    url: "/Students/LoginStudent",
+                    data: { id: id },
+                    success: function (response) {
+                        if (response == "error") {
+                            Swal.fire({
+                                title: 'No data available!',
+                                text: 'Please talk to a person in charge to register your student id',
+                                type: 'error',
+                                confirmButtonText: 'Okay'
+                            },
+                            function (isConfirm) {
+                                if (isConfirm) {
+                                    swal.close();
+                                }
+                            });
+                        } else {
+                            for (var i in response) {
+                                name = response[i].StudentName;
+                                studentid = response[i].StudentId;
+                                studentcourse = response[i].StudentCourse;
+                            }
+
+
+                            Swal.fire({
+                                title: 'Please verify the details below',
+                                html: '<b>Student Id: </b>' + studentid +
+                                      '</br><b>Name: </b>' + name +
+                                      '</br><b>Course: </b>' + studentcourse +
+                                      '</br></br><center><h4><b>Are you this person?</b></h4></center>',
+                                type: 'warning',
+                                showCancelButton: true,
+                                confirmButtonText: 'Yes, I am',
+                                cancelButtonText: 'No, I am not',
+                                reverseButtons: true
+
+                            }).then(result => {
+                                if (result.value) {
+                                    $.ajax({
+                                        type: "POST",
+                                        url: "/Students/LoginSession",
+                                        data: { id: id },
+                                        success: function (response) {
+                                            if (response == "error") {
+
+                                            } else {
+                                                window.location.href = '@Url.Action("Home", "Students")';
+                                            }
+
+                                        }
+                                    });
+                                } else {
+                                    swal.dismiss
+                                }
+                            })
+
+                        }
+
+                    }
+                });
+
+            }
+            
+        });
+
+    });
+
+
+</script>
